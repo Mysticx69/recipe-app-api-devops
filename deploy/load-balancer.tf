@@ -1,6 +1,6 @@
-###############
+##############################################
 # Load Balancer
-###############
+##############################################
 resource "aws_lb" "api" {
   #checkov:skip=CKV_AWS_91: "Ensure the ELBv2 (Application/Network) has access logging enabled"
   #checkov:skip=CKV2_AWS_20: "Ensure that ALB redirects HTTP requests into HTTPS ones"
@@ -18,9 +18,9 @@ resource "aws_lb" "api" {
   security_groups = [aws_security_group.lb.id]
 }
 
-##############
+##############################################
 # Target Group
-##############
+##############################################
 resource "aws_lb_target_group" "api" {
   name        = "${terraform.workspace}-api"
   protocol    = "HTTP"
@@ -33,9 +33,9 @@ resource "aws_lb_target_group" "api" {
   }
 }
 
-#############
+##############################################
 # LB Listener
-#############
+##############################################
 resource "aws_lb_listener" "api" {
   #checkov:skip=CKV_AWS_2: "Ensure ALB protocol is HTTPS"
   #checkov:skip=CKV_AWS_103: "Ensure that load balancer is using at least TLS 1.2"
@@ -49,18 +49,18 @@ resource "aws_lb_listener" "api" {
   }
 }
 
-###################
+##############################################
 # LB Security Group
-###################
+##############################################
 resource "aws_security_group" "lb" {
   description = "Allow access to Application Load Balancer"
   name        = "lb_sg"
   vpc_id      = module.vpc.vpc_id
 }
 
-#################
+##############################################
 # Ingress Rule(s)
-#################
+##############################################
 resource "aws_security_group_rule" "allow_http_lb" {
   description       = "Allow HTTP igress"
   type              = "ingress"
@@ -71,9 +71,9 @@ resource "aws_security_group_rule" "allow_http_lb" {
   security_group_id = aws_security_group.lb.id
 }
 
-################
+##############################################
 # Egress Rule(s)
-################
+##############################################
 resource "aws_security_group_rule" "allow_8000_lb" {
   description       = "Allow 8000 egress"
   type              = "egress"
