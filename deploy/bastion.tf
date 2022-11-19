@@ -56,7 +56,7 @@ resource "aws_instance" "bastion" {
   user_data                   = file("./templates/bastion/user-data.sh")
   iam_instance_profile        = aws_iam_instance_profile.bastion.name
   key_name                    = aws_key_pair.bastion_kp.id
-  subnet_id                   = element(element(module.Networking.public_subnets_id, 1), 0)
+  subnet_id                   = element(element(module.vpc.public_subnets_id, 1), 0)
   vpc_security_group_ids      = [aws_security_group.bastion_sg.id]
   associate_public_ip_address = true
 
@@ -80,7 +80,7 @@ resource "aws_instance" "bastion" {
 resource "aws_security_group" "bastion_sg" {
   description = "Control bastion ingress and egress access"
   name        = "${terraform.workspace}-bastion_sg"
-  vpc_id      = module.Networking.vpc_id
+  vpc_id      = module.vpc.vpc_id
 
   tags = {
     Name = "bastion_sg"
@@ -129,6 +129,6 @@ resource "aws_security_group_rule" "allow_postgres_egress_bastion_sg" {
   from_port         = 5432
   to_port           = 5432
   protocol          = "tcp"
-  cidr_blocks       = [element(element(module.Networking.private_subnets_cidr, 1), 0), element(element(module.Networking.private_subnets_cidr, 1), 1)]
+  cidr_blocks       = [element(element(module.vpc.private_subnets_cidr, 1), 0), element(element(module.vpc.private_subnets_cidr, 1), 1)]
   security_group_id = aws_security_group.bastion_sg.id
 }

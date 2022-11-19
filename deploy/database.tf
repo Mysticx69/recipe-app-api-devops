@@ -5,8 +5,8 @@ resource "aws_db_subnet_group" "main_subnet_group" {
   name = "db_group-${terraform.workspace}"
 
   subnet_ids = [
-    element(element(module.Networking.private_subnets_id, 1), 0),
-    element(element(module.Networking.private_subnets_id, 1), 1)
+    element(element(module.vpc.private_subnets_id, 1), 0),
+    element(element(module.vpc.private_subnets_id, 1), 1)
   ]
 
   tags = {
@@ -20,7 +20,7 @@ resource "aws_db_subnet_group" "main_subnet_group" {
 resource "aws_security_group" "rds_sg" {
   description = "Allow access to the RDS database instance."
   name        = "${terraform.workspace}-rds-inbound-access"
-  vpc_id      = module.Networking.vpc_id
+  vpc_id      = module.vpc.vpc_id
 
   tags = {
     Name = "rds_sg"
