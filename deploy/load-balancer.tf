@@ -11,8 +11,8 @@ resource "aws_lb" "api" {
   drop_invalid_header_fields = true
 
   subnets = [
-    element(element(module.Networking.public_subnets_id, 1), 0),
-    element(element(module.Networking.public_subnets_id, 1), 1)
+    element(element(module.vpc.public_subnets_id, 1), 0),
+    element(element(module.vpc.public_subnets_id, 1), 1)
   ]
 
   security_groups = [aws_security_group.lb.id]
@@ -24,7 +24,7 @@ resource "aws_lb" "api" {
 resource "aws_lb_target_group" "api" {
   name        = "${terraform.workspace}-api"
   protocol    = "HTTP"
-  vpc_id      = module.Networking.vpc_id
+  vpc_id      = module.vpc.vpc_id
   target_type = "ip"
   port        = 8000
 
@@ -55,7 +55,7 @@ resource "aws_lb_listener" "api" {
 resource "aws_security_group" "lb" {
   description = "Allow access to Application Load Balancer"
   name        = "lb_sg"
-  vpc_id      = module.Networking.vpc_id
+  vpc_id      = module.vpc.vpc_id
 }
 
 #################

@@ -22,6 +22,12 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: eu-west-3
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          role-session-name: OIDCSession
+
       - name: Terraform Format
         id: fmt
         run: terraform fmt -check

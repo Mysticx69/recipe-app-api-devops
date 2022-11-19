@@ -87,7 +87,7 @@ resource "aws_ecs_task_definition" "api" {
 resource "aws_security_group" "ecs_sg" {
   description = "Access for the ECS service"
   name        = "${terraform.workspace}-ecs-service"
-  vpc_id      = module.Networking.vpc_id
+  vpc_id      = module.vpc.vpc_id
 
   tags = {
     Name = "ecs_sg"
@@ -126,7 +126,7 @@ resource "aws_security_group_rule" "allow_postgres_ecs_sg" {
   from_port         = 5432
   to_port           = 5432
   protocol          = "tcp"
-  cidr_blocks       = [element(element(module.Networking.private_subnets_cidr, 1), 0), element(element(module.Networking.private_subnets_cidr, 1), 1)]
+  cidr_blocks       = [element(element(module.vpc.private_subnets_cidr, 1), 0), element(element(module.vpc.private_subnets_cidr, 1), 1)]
   security_group_id = aws_security_group.ecs_sg.id
 }
 
@@ -144,8 +144,8 @@ resource "aws_ecs_service" "api" {
   network_configuration {
 
     subnets = [
-      element(element(module.Networking.private_subnets_id, 1), 0),
-      element(element(module.Networking.private_subnets_id, 1), 1)
+      element(element(module.vpc.private_subnets_id, 1), 0),
+      element(element(module.vpc.private_subnets_id, 1), 1)
     ]
 
     security_groups  = [aws_security_group.ecs_sg.id]
