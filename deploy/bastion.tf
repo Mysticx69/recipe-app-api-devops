@@ -74,9 +74,9 @@ resource "aws_instance" "bastion" {
   }
 }
 
-########################
+###########################
 # Bastion Security Group
-########################
+###########################
 resource "aws_security_group" "bastion_sg" {
   description = "Control bastion ingress and egress access"
   name        = "${terraform.workspace}-bastion_sg"

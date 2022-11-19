@@ -2,31 +2,31 @@ name: "Test and Lint Terraform"
 
 on:
   push:
-    branches:
-      - "main"
+  # branches:
+  #   - "main"
   pull_request:
-    branches:
-      - "main"
+    # branches:
+    #   - "main"
 
 jobs:
   validate-terraform:
     name: "Test and lint terraform code"
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    defaults:
-      run:
-        working-directory: deploy
+    # if: github.event_name == 'pull_request'
+    # defaults:
+    #   run:
+    #     working-directory: deploy
     steps:
       - uses: actions/checkout@v3
-      - uses: hashicorp/setup-terraform@v2
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      # - uses: hashicorp/setup-terraform@v2
+      #   with:
+      #     cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: eu-west-3
-          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-          role-session-name: OIDCSession
+          role-to-assume: arn:aws:iam::166526365211:role/OICD-role
+          role-session-name: OIDCSession-PR
 
       - name: Terraform Format
         id: fmt
