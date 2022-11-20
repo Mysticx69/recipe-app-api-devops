@@ -2,12 +2,12 @@
 # Load Balancer
 ##############################################
 resource "aws_lb" "api" {
+  #checkov:skip=CKV_AWS_150: "No need to ensure that LB cant be deleted"
   #checkov:skip=CKV_AWS_91: "Ensure the ELBv2 (Application/Network) has access logging enabled"
   #checkov:skip=CKV2_AWS_20: "Ensure that ALB redirects HTTP requests into HTTPS ones"
   #checkov:skip=CKV2_AWS_28: "Ensure public facing ALB are protected by WAF"
   name                       = "${terraform.workspace}-main"
   load_balancer_type         = "application"
-  enable_deletion_protection = true
   drop_invalid_header_fields = true
 
   subnets = [
