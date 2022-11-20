@@ -1,0 +1,24 @@
+name: Destroy Terraform
+
+on:
+  workflow_dispatch:
+
+jobs:
+  Destroy-terraform-staging:
+    name: "Destroy Terraform"
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+    steps:
+      - name: Checkout The Code
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform destroy staging
+        run: |
+          terraform init
+          terraform destroy -auto-approve
