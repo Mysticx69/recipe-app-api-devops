@@ -1,4 +1,4 @@
-name: Build&PushDocker
+name: Build & Push Docker to ECR
 
 on:
   workflow_dispatch:

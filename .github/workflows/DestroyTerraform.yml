@@ -7,6 +7,9 @@ jobs:
   Destroy-terraform-staging:
     name: "Destroy Terraform"
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: deploy
     environment:
       name: staging
     steps:

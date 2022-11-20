@@ -61,7 +61,7 @@ resource "aws_db_instance" "main" {
   #checkov:skip=CKV_AWS_157: "Ensure that RDS instances have Multi-AZ enabled"
   #checkov:skip=CKV_AWS_118: "Ensure that enhanced monitoring is enabled for Amazon RDS instances"
   #checkov:skip=CKV2_AWS_30: "Ensure Postgres RDS as aws_db_instance has Query Logging enabled"
-  identifier                 = "${terraform.workspace}-db"
+  identifier                 = "rds-db"
   db_name                    = "recipe"
   auto_minor_version_upgrade = true
   allocated_storage          = 20
