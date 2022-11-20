@@ -1,0 +1,28 @@
+name: Deploy Terraform
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  deploy-terraform-staging:
+    name: "Deploy Terraform Staging"
+    needs: [build-push-docker-prod]
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+    steps:
+      - name: Checkout The Code
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform Apply staging
+        run: |
+          terraform workspace select staging || terraform workspace new staging
+          terraform init
+          terraform apply -auto-approve -input=false
