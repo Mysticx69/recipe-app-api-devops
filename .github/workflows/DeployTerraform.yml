@@ -60,5 +60,4 @@ jobs:
       - name: Terraform Apply staging
         run: |
           terraform init
-          terraform workspace select staging || terraform workspace new staging
           terraform apply -auto-approve -input=false
