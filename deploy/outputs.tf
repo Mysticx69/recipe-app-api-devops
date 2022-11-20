@@ -4,7 +4,7 @@ output "db_host" {
 }
 
 output "bastion_host" {
-  description = "Output public DNS name of bastion server"
+  description = "Output Public DNS Name Of Bastion Server"
   value       = aws_instance.bastion.public_dns
 }
 
