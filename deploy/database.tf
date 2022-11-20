@@ -1,6 +1,6 @@
-#################
+##############################################
 # Db_Subnet_Group
-#################
+##############################################
 resource "aws_db_subnet_group" "main_subnet_group" {
   name = "db_group-${terraform.workspace}"
 
@@ -14,9 +14,9 @@ resource "aws_db_subnet_group" "main_subnet_group" {
   }
 }
 
-####################
+##############################################
 # RDS Security Group
-####################
+##############################################
 resource "aws_security_group" "rds_sg" {
   description = "Allow access to the RDS database instance."
   name        = "${terraform.workspace}-rds-inbound-access"
@@ -27,9 +27,9 @@ resource "aws_security_group" "rds_sg" {
   }
 }
 
-#################
+##############################################
 # Ingress Rule(s)
-#################
+##############################################
 resource "aws_security_group_rule" "allow_postgre_rds_sg" {
   description              = "Allow port TCP:5432 igress from bastion"
   type                     = "ingress"
@@ -50,9 +50,9 @@ resource "aws_security_group_rule" "allow_postgre_rds_sg_2" {
   security_group_id        = aws_security_group.rds_sg.id
 }
 
-#############
+##############################################
 # Db Instance
-#############
+##############################################
 resource "aws_db_instance" "main" {
   #checkov:skip=CKV_AWS_161: "Ensure RDS database has IAM authentication enabled"
   #checkov:skip=CKV_AWS_16:  "Ensure all data stored in the RDS is securely encrypted at rest"

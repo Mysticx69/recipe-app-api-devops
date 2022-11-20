@@ -1,6 +1,6 @@
-#############
+##############################################
 # ECS Cluster
-#############
+##############################################
 resource "aws_ecs_cluster" "main" {
   name = "${terraform.workspace}-cluster"
 
@@ -10,9 +10,9 @@ resource "aws_ecs_cluster" "main" {
   }
 }
 
-#####################
+##############################################
 # Iam policy and role
-#####################
+##############################################
 resource "aws_iam_policy" "task_execution_role_policy" {
   name        = "${terraform.workspace}-task-exec-role-policy"
   path        = "/"
@@ -35,18 +35,18 @@ resource "aws_iam_role" "app_iam_role" {
   assume_role_policy = file("./templates/ecs/assume-role-policy.json")
 }
 
-##################
+##############################################
 # CloudWatch Group
-##################
+##############################################
 resource "aws_cloudwatch_log_group" "ecs_task_logs" {
   #checkov:skip=CKV_AWS_158: "Ensure that CloudWatch Log Group is encrypted by KMS"
   name              = "${terraform.workspace}-api"
   retention_in_days = 90
 }
 
-####################
+##############################################
 # Template file data
-####################
+##############################################
 data "template_file" "api_container_definitions" {
   template = file("templates/ecs/container-definitions.json.tpl")
   vars = {
@@ -63,9 +63,9 @@ data "template_file" "api_container_definitions" {
   }
 }
 
-##################
+##############################################
 # Task Definition
-#################
+##############################################
 resource "aws_ecs_task_definition" "api" {
   family                   = "${terraform.workspace}-api"
   container_definitions    = data.template_file.api_container_definitions.rendered
@@ -81,9 +81,9 @@ resource "aws_ecs_task_definition" "api" {
   }
 }
 
-####################
+##############################################
 # ECS Security Group
-####################
+##############################################
 resource "aws_security_group" "ecs_sg" {
   description = "Access for the ECS service"
   name        = "${terraform.workspace}-ecs-service"
@@ -94,9 +94,9 @@ resource "aws_security_group" "ecs_sg" {
   }
 }
 
-#################
+##############################################
 # Ingress Rule(s)
-#################
+##############################################
 resource "aws_security_group_rule" "allow_8000_ecs_sg" {
   description              = "Allow port TCP:8000 igress"
   type                     = "ingress"
@@ -107,9 +107,9 @@ resource "aws_security_group_rule" "allow_8000_ecs_sg" {
   security_group_id        = aws_security_group.ecs_sg.id
 }
 
-################
+##############################################
 # Egress Rule(s)
-################
+##############################################
 resource "aws_security_group_rule" "allow_https_ecs_sg" {
   description       = "Allow HTTPS egress"
   type              = "egress"
@@ -130,9 +130,9 @@ resource "aws_security_group_rule" "allow_postgres_ecs_sg" {
   security_group_id = aws_security_group.ecs_sg.id
 }
 
-#############
+##############################################
 # Ecs Service
-#############
+##############################################
 resource "aws_ecs_service" "api" {
   name             = "${terraform.workspace}-api"
   cluster          = aws_ecs_cluster.main.name

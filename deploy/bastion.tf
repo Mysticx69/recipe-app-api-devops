@@ -1,6 +1,6 @@
-##################
+##############################################
 # Retrieve Aws AMI
-##################
+##############################################
 data "aws_ami" "amazon_linux" {
   most_recent = true
   filter {
@@ -11,41 +11,41 @@ data "aws_ami" "amazon_linux" {
 }
 
 
-######################
+##############################################
 # Iam Role For Bastion
-######################
+##############################################
 resource "aws_iam_role" "bastion" {
   name               = "iamrole-bastion"
   assume_role_policy = file("./templates/bastion/instance-profile-policy.json")
 }
 
-##################
+##############################################
 #Policy Attachment
-##################
+##############################################
 resource "aws_iam_role_policy_attachment" "bastion_attach_policy" {
   role       = aws_iam_role.bastion.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
 
-#################
+##############################################
 #Instance Profile
-#################
+##############################################
 resource "aws_iam_instance_profile" "bastion" {
   name = "bastion-instance-profile"
   role = aws_iam_role.bastion.name
 }
 
-##########
+##############################################
 # Key Pair
-##########
+##############################################
 resource "aws_key_pair" "bastion_kp" {
   key_name   = "recipe-app-api-devops-bastion"
   public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDHjoaUsZBPUAXIhv9JL8riFean8nEXIXVN1d61mC1CO8PTG6BcPrrY0W1JPtDAsU+x4TBJV9EQm7vYXAZEIXe7KwkeTL61alU8U6mG6nCXllinSysJGPoFjCwdzgcu58h6M7WL3nODbZh6e/9PPLmP/Ufb1S1RQdOoTQMJaHh0bo9AIN8JmPjBOIJitGRYs4tFyVHjGU4YGOw3evDwW9qITcJ/uJSvxqQy81zQ4tM+pdW41t+Lm1qsEOlrqibvj2yPU0XuyHDlUXW8XGKzQFrMJNgBopdpWaE8Hk8egljH6TVjFkWhVzg1H60DzZm/oZDjEnmFxnp7hMPhE9n49cb3rnowWiE8av1bmT89/R10sg+WpPT53EXOMb5BK6lescDv2T/fD2/b3oVDsO4fnFEdYqA2uoqZN9cQw66owzZAKqezfi3RiR2wVYAafe78G3n6X3W3PslTGxRDkcQ/mtcIICRQTPiJkqlIA4iORtPBsl2vJIBrciWxK/QDgiOxD/M= user@DESKTOP-JS87L9H"
 }
 
-################
+##############################################
 # Bastion Server
-################
+##############################################
 resource "aws_instance" "bastion" {
   #checkov:skip=CKV_AWS_135: "Ensure that EC2 is EBS optimized" => Not supported
   #checkov:skip=CKV_AWS_126: "Ensure that detailed monitoring is enabled for EC2 instances" => Not supported
@@ -74,9 +74,9 @@ resource "aws_instance" "bastion" {
   }
 }
 
-########################
+##############################################
 # Bastion Security Group
-########################
+##############################################
 resource "aws_security_group" "bastion_sg" {
   description = "Control bastion ingress and egress access"
   name        = "${terraform.workspace}-bastion_sg"
@@ -87,9 +87,9 @@ resource "aws_security_group" "bastion_sg" {
   }
 }
 
-#################
+##############################################
 # Ingress Rule(s)
-#################
+##############################################
 resource "aws_security_group_rule" "allow_ssh_ingress_bastion_sg" {
   description       = "Allow ssh igress"
   type              = "ingress"
@@ -100,9 +100,9 @@ resource "aws_security_group_rule" "allow_ssh_ingress_bastion_sg" {
   security_group_id = aws_security_group.bastion_sg.id
 }
 
-################
+##############################################
 # Egress Rule(s)
-################
+##############################################
 resource "aws_security_group_rule" "allow_http_egress_bastion_sg" {
   description       = "Allow http egress"
   type              = "egress"
