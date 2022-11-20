@@ -4,11 +4,11 @@ output "db_host" {
 }
 
 output "bastion_host" {
-  description = "Output public dns name of bastion server"
+  description = "Output public DNS name of bastion server"
   value       = aws_instance.bastion.public_dns
 }
 
 output "api_endpoint" {
-  description = "Output the DNS name of the  internet facing load balancer"
+  description = "Output the DNS name of the internet facing load balancer"
   value       = aws_lb.api.dns_name
 }

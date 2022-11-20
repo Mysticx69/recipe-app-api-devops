@@ -9,6 +9,9 @@ jobs:
   deploy-terraform-staging:
     name: "Deploy Terraform Staging"
     needs: [build-push-docker-prod]
+    defaults:
+      run:
+        working-directory: deploy
     runs-on: ubuntu-latest
     environment:
       name: staging
