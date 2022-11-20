@@ -5,6 +5,10 @@ on:
     branches:
       - "main"
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build-push-docker-prod:
     name: "Build image and push to ECR"
@@ -55,6 +59,6 @@ jobs:
 
       - name: Terraform Apply staging
         run: |
-          terraform workspace select staging || terraform workspace new staging
           terraform init
+          terraform workspace select staging || terraform workspace new staging
           terraform apply -auto-approve -input=false
